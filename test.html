@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send Command to Discord Webhook</title>
+</head>
+<body>
+  <h1>Send Command to Discord Webhook</h1>
+  <form id="cmdForm">
+    <label for="cmdInput">Enter Command:</label>
+    <input type="text" id="cmdInput" name="cmdInput" required>
+    <button type="submit">Send to Discord Webhook</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    const form = document.getElementById('cmdForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const command = document.getElementById('cmdInput').value;
+
+      // Check if the input is empty
+      if (!command.trim()) {
+        document.getElementById('output').textContent = 'Please enter a valid command.';
+        return;
+      }
+
+      // Your Discord webhook URL (replace with your actual URL)
+      const webhookUrl = 'https://discordapp.com/api/webhooks/1337147626159734954/uIP6k65ZBMI_9JJVQ31224AJKoLP-t6cOY9d3u9fVFpuYOZ5h7nYeuMn4sBa_WIABlGG';
+
+      try {
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content: command,  // The message sent to Discord
+          }),
+        });
+
+        if (response.ok) {
+          document.getElementById('output').textContent = 'Command successfully sent to Discord!';
+        } else {
+          document.getElementById('output').textContent = 'Failed to send command to Discord.';
+        }
+      } catch (error) {
+        document.getElementById('output').textContent = 'Error sending data to webhook.';
+      }
+    });
+  </script>
+</body>
+</html>
