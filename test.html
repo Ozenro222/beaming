@@ -1,55 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Send Command to Discord Webhook</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REAPER</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --card: #0f0f0f;
+      --border: rgba(255,255,255,0.08);
+      --muted: #b3b3b3;
+      --text: #ffffff;
+      --btn: #ffffff;
+      --btn-text: #000000;
+      --green: #22c55e;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(ellipse at center, #0a0a0a 0%, #000 70%);
+      color: var(--text);
+    }
+
+    /* NAV */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      font-size: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .nav-links a:hover { color: #fff; }
+
+    .btn-primary {
+      background: var(--btn);
+      color: var(--btn-text);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #0f0f0f;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.05;
+      margin: 0 0 20px;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 0 auto 36px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-outline {
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      background: #0f0f0f;
+    }
+
+    /* SECTIONS */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 28px;
+    }
+
+    section h2 {
+      font-size: 36px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    /* CARDS */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #0f0f0f, #0b0b0b);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: transform 0.2s ease, border 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #141414;
+      display: grid;
+      place-items: center;
+      margin-bottom: 24px;
+      font-weight: 900;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .card p {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card a {
+      display: inline-block;
+      background: #fff;
+      color: #000;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 28px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Send Command to Discord Webhook</h1>
-  <form id="cmdForm">
-    <label for="cmdInput">Enter Command:</label>
-    <input type="text" id="cmdInput" name="cmdInput" required>
-    <button type="submit">Send to Discord Webhook</button>
-  </form>
 
-  <div id="output"></div>
+  <header>
+    <div class="nav">
+      <div class="logo">REAPER</div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#tools">Tools</a>
+        <a href="#tutorials">Tutorials</a>
+        <a href="#community">Community</a>
+      </nav>
+      <a href="#start" class="btn-primary">Get Started</a>
+    </div>
+  </header>
 
-  <script>
-    const form = document.getElementById('cmdForm');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const command = document.getElementById('cmdInput').value;
+  <main id="home" class="hero">
+    <div>
+      <div class="status">
+        <span class="dot"></span>
+        <span>All systems operational</span>
+      </div>
+      <h1>REAPER<br>#1 GAME HUB</h1>
+      <p>
+        Welcome to REAPER. A clean, modern hub built for our video game — tools, guides,
+        updates and community all in one place.
+      </p>
+      <div class="hero-buttons">
+        <a href="#main" class="btn-primary">MAIN SITE</a>
+        <a href="#backup" class="btn-outline">BACKUP SITE</a>
+      </div>
+    </div>
+  </main>
 
-      // Check if the input is empty
-      if (!command.trim()) {
-        document.getElementById('output').textContent = 'Please enter a valid command.';
-        return;
-      }
+  <section id="tools">
+    <h2>TOOLS</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🔗</div>
+        <h3>Link Manager</h3>
+        <p>Manage and organize in‑game or community links for your project.</p>
+        <a href="#">Try It Now</a>
+      </div>
+      <div class="card">
+        <div class="icon">📘</div>
+        <h3>Methods</h3>
+        <p>Guides and explanations for mechanics, systems, and gameplay features.</p>
+        <a href="#">Learn More</a>
+      </div>
+      <div class="card">
+        <div class="icon">⚙️</div>
+        <h3>Game Utilities</h3>
+        <p>Helpful utilities and features designed specifically for REAPER.</p>
+        <a href="#">Try It Now</a>
+      </div>
+    </div>
+  </section>
 
-      // Your Discord webhook URL (replace with your actual URL)
-      const webhookUrl = 'https://discordapp.com/api/webhooks/1337147626159734954/uIP6k65ZBMI_9JJVQ31224AJKoLP-t6cOY9d3u9fVFpuYOZ5h7nYeuMn4sBa_WIABlGG';
+  <section id="tutorials">
+    <h2>TUTORIALS & CHANNEL</h2>
+    <p style="text-align:center; max-width:720px; margin:0 auto; color:#b3b3b3;">
+      Learn how everything works, watch development updates, and explore gameplay tips.
+    </p>
+  </section>
 
-      try {
-        const response = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            content: command,  // The message sent to Discord
-          }),
-        });
+  <footer>
+    <div>© 2026 REAPER. All rights reserved.</div>
+  </footer>
 
-        if (response.ok) {
-          document.getElementById('output').textContent = 'Command successfully sent to Discord!';
-        } else {
-          document.getElementById('output').textContent = 'Failed to send command to Discord.';
-        }
-      } catch (error) {
-        document.getElementById('output').textContent = 'Error sending data to webhook.';
-      }
-    });
-  </script>
 </body>
 </html>
